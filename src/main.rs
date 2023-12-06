@@ -29,19 +29,44 @@ pub extern "C" fn _start() -> ! {
 
     blog_os::init();
 
-    // x86_64::instructions::interrupts::int3();
-    //
-    // // trigger a page fault
-    // unsafe {
-    //     *(0xdeadbeef as *mut u8) = 42;
-    // };
+    {
+        // fn stack_overflow() {
+        //     stack_overflow(); // for each recursion, the return address is pushed
+        // }
 
-    // fn stack_overflow() {
-    //     stack_overflow(); // for each recursion, the return address is pushed
-    // }
+        // trigger a stack overflow
+        // stack_overflow();
+    }
 
-    // trigger a stack overflow
-    // stack_overflow();
+    {
+        // trigger a page fault
+        // unsafe {
+        //     *(0xdeadbeef as *mut u8) = 42;
+        // };
+
+        // points to a read-only page
+        // let ptr = 0x2052ea as *mut u8;
+        // read from a code page
+        // unsafe {
+        //     let _ = *ptr;
+        // }
+        // println!("read worked");
+
+        // write to a code page
+        // unsafe {
+        //     *ptr = 42;
+        // }
+        // println!("write worked");
+
+        // access level 4 page table
+        use x86_64::registers::control::Cr3;
+
+        let (level_4_page_table, _) = Cr3::read();
+        println!(
+            "Level 4 page table at: {:?}",
+            level_4_page_table.start_address()
+        );
+    }
 
     #[cfg(test)]
     test_main();
