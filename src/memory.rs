@@ -1,5 +1,7 @@
 use bootloader::bootinfo::{MemoryMap, MemoryRegionType};
-use x86_64::structures::paging::{OffsetPageTable, PageTable};
+use x86_64::structures::paging::{
+    FrameAllocator, Mapper, OffsetPageTable, Page, PageTable, PhysFrame, Size4KiB,
+};
 use x86_64::{PhysAddr, VirtAddr};
 
 /// Initialize a new OffsetPageTable.
@@ -78,8 +80,6 @@ unsafe fn _translate_addr(addr: VirtAddr, physical_memory_offset: VirtAddr) -> O
     // calculate the physical address by adding the page offset
     Some(frame.start_address() + u64::from(addr.page_offset()))
 }
-
-use x86_64::structures::paging::{FrameAllocator, Mapper, Page, PhysFrame, Size4KiB};
 
 /// Creates an example mapping for the given page to frame `0xb8000`.
 pub fn create_example_mapping(
