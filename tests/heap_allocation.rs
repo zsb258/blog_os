@@ -11,6 +11,8 @@ use core::panic::PanicInfo;
 
 use bootloader::{entry_point, BootInfo};
 
+use blog_os::allocator::HEAP_SIZE;
+
 entry_point!(main);
 
 fn main(boot_info: &'static BootInfo) -> ! {
@@ -48,12 +50,20 @@ fn large_vec() {
 
 #[test_case]
 fn many_boxes() {
-    use blog_os::allocator::HEAP_SIZE;
-
     for i in 0..HEAP_SIZE {
         let x = Box::new(i);
         assert_eq!(*x, i);
     }
+}
+
+#[test_case]
+fn many_boxes_long_lived() {
+    let long_lived = Box::new(1);
+    for i in 0..HEAP_SIZE {
+        let x = Box::new(i);
+        assert_eq!(*x, i);
+    }
+    assert_eq!(*long_lived, 1);
 }
 
 #[panic_handler]
