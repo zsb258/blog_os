@@ -5,13 +5,16 @@ pub mod linked_list;
 use alloc::alloc::{GlobalAlloc, Layout};
 use core::ptr::null_mut;
 
+#[allow(unused_imports)]
 use linked_list_allocator::LockedHeap;
 use x86_64::structures::paging::mapper::MapToError;
 use x86_64::structures::paging::{FrameAllocator, Mapper, Page, PageTableFlags, Size4KiB};
 use x86_64::VirtAddr;
 
+#[allow(unused_imports)]
 use bump::BumpAllocator;
 use fixed_size_block::FixedSizeBlockAllocator;
+#[allow(unused_imports)]
 use linked_list::LinkedListAllocator;
 
 #[global_allocator]
